@@ -2,9 +2,26 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
+import { useRouter } from "next/navigation";
+import { signOut } from "@/actions";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  //router
+  const router = useRouter();
+  //handle sign out
+  const handleSignOut = async () => {
+    const result = await signOut();
+
+    if (result.error) {
+      alert(result?.error || "Internal server error during sign out");
+    } else {
+      alert(result?.message || "Successfully signed out");
+      router.push("/auth/signin"); // Redirect to login or any other page after sign out
+    }
+
+    console.log(result);
+  };
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
@@ -128,7 +145,10 @@ const DropdownUser = () => {
               </Link>
             </li>
           </ul>
-          <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+          <button
+            onClick={handleSignOut}
+            className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+          >
             <svg
               className="fill-current"
               width="22"

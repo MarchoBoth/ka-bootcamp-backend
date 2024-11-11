@@ -35,10 +35,12 @@ enum Roles {
 }
 
 model Category {
-  id        Int       @id @default(autoincrement())
-  name      String
-  createdAt DateTime  @default(now())
-  products  Product[]
+  id          Int       @id @default(autoincrement())
+  name        String
+  createdAt   DateTime  @default(now())
+  products    Product[]
+  isActive    Boolean   @default(true)
+  description String?   @db.Text
 
   @@map("categories")
 }
