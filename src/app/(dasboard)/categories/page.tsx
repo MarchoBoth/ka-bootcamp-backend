@@ -1,20 +1,35 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { Package } from "@/types/package";
 import prisma from "@/lib/prisma";
 import dayjs from "dayjs";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { deleteCategory } from "@/actions";
+import Swal from "sweetalert2";
+
 export default async function CategoriesPage() {
   //get categories
+
   const categories = await prisma.category.findMany();
   console.log(categories);
+
+  const handleDelete = async (id: string) => {
+    const confirmation = confirm(
+      "Are you sure? You won't be able to revert this!",
+    );
+
+    if (confirmation) {
+      const result = await deleteCategory(id);
+      if (result) {
+        alert("Category has been deleted successfully");
+      }
+    }
+  };
   return (
     <div>
       <Breadcrumb pageName="Categories" />
       <div className="flex justify-end">
         <Link
           href="/categories/create "
-          className="btn btn-primary m-2 rounded-lg bg-green-600 p-2 px-7 py-3 text-white transition-all duration-300 ease-in-out hover:bg-green-900"
+          className="btn btn-primary m-2 rounded-lg bg-green-600  px-7 py-3 text-white transition-all duration-300 ease-in-out hover:bg-green-900"
         >
           add Category
         </Link>
@@ -30,9 +45,7 @@ export default async function CategoriesPage() {
                 <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                   Created At
                 </th>
-                {/* <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                  Status
-                </th> */}
+
                 <th className="px-4 py-4 font-medium text-black dark:text-white">
                   Actions
                 </th>
@@ -54,41 +67,37 @@ export default async function CategoriesPage() {
                       {dayjs(category.createdAt).format("DD MMMM YYYY")}
                     </p>
                   </td>
-                  {/* <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p
-                      className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
-                        packageItem.status === "Paid"
-                          ? "bg-success text-success"
-                          : packageItem.status === "Unpaid"
-                            ? "bg-danger text-danger"
-                            : "bg-warning text-warning"
-                      }`}
-                    >
-                      {packageItem.status}
-                    </p>
-                  </td> */}
+                  {/* actions */}
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <div className="flex items-center space-x-3.5">
-                      <button className="hover:text-primary">
-                        <svg
-                          className="fill-current"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 18 18"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
-                            fill=""
-                          />
-                          <path
-                            d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z"
-                            fill=""
-                          />
-                        </svg>
-                      </button>
-                      <button className="hover:text-primary">
+                      {/* edit */}
+                      <Link href={`categories/${category.id}`}>
+                        <button className="hover:text-primary">
+                          <svg
+                            className="fill-current"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 18 18"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
+                              fill=""
+                            />
+                            <path
+                              d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z"
+                              fill=""
+                            />
+                          </svg>
+                        </button>
+                      </Link>
+                      {/* delete */}
+
+                      <button
+                        onClick={() => handleDelete(category.id.toString())}
+                        className="hover:text-primary"
+                      >
                         <svg
                           className="fill-current"
                           width="18"

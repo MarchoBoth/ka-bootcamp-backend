@@ -80,7 +80,7 @@ export async function signIn(formData: FormData) {
     }
   }
 }
-//
+//sign out
 export async function signOut() {
   try {
     // Clear the token cookie to log out the user
@@ -119,6 +119,65 @@ export async function createCategory(formData: FormData) {
     };
   } catch (err: any) {
     console.log(err);
-    return { success: false, error: err?.message || "Internal server error" };
+    if (err instanceof ZodError) {
+      return { success: false, error: "please insert a corect data" };
+      //end of if
+    } else {
+      return { success: false, error: err?.message || "internal server eror" };
+    }
+  }
+}
+
+//edit category
+export async function editCategory(id: string, formData: FormData) {
+  try {
+    const body = {
+      name: formData.get("name"),
+      isActive: formData.get("isActive"),
+      description: formData.get("description"),
+    };
+
+    categorySchema.parse(body);
+
+    const updatedCategory = await prisma.category.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        name: body.name as string,
+        description: body.description as string,
+        isActive: body.isActive === "1" ? true : false,
+      },
+    });
+    return {
+      success: true,
+      data: updatedCategory,
+    };
+  } catch (err: any) {
+    console.log(err);
+    if (err instanceof ZodError) {
+      return { success: false, error: "please insert a corect data" };
+      //end of if
+    } else {
+      return { success: false, error: err?.message || "internal server eror" };
+    }
+  }
+}
+//delete category
+export async function deleteCategory(id: string) {
+  try {
+    await prisma.category.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+  } catch (err: any) {
+    console.log(err);
+    if (err instanceof ZodError) {
+      return { success: false, error: "please insert a corect data" };
+      //end of if
+    } else {
+      return { success: false, error: err?.message || "internal server eror" };
+    }
   }
 }
