@@ -13,7 +13,11 @@ export default async function ProductDetail({
       id: Number(params.productId),
     },
     include: {
-      colors: true,
+      colors: {
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
     },
   });
   if (!product) {

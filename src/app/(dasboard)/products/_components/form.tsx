@@ -235,6 +235,7 @@ export default function FormProduct({ categories, product }: FormProductProps) {
                             item.quantity,
                           )
                         }
+                        defaultValue={item?.color}
                         value={item.color}
                         type="color"
                         required
@@ -249,6 +250,7 @@ export default function FormProduct({ categories, product }: FormProductProps) {
                             Number(e.target.value),
                           )
                         }
+                        defaultValue={item?.quantity}
                         type="number"
                         required
                         name="quantity"
