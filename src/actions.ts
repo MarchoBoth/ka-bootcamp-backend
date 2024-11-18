@@ -1,12 +1,18 @@
 "use server";
 
-import { string, ZodError } from "zod";
+import { number, string, ZodError } from "zod";
 import prisma from "./lib/prisma";
 import { userSignInSchema } from "./schema/user";
 import { compareSync } from "bcrypt";
 import { SignJWT } from "jose";
 import { cookies } from "next/headers";
 import { categorySchema } from "./schema/category";
+import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
+import { productSchema } from "./schema/product";
+interface Color {
+  color: string;
+  quantity: number;
+}
 
 //sign in
 export async function signIn(formData: FormData) {
@@ -129,7 +135,7 @@ export async function createCategory(formData: FormData) {
 }
 
 //edit category
-export async function editCategory(id: string, formData: FormData) {
+export async function editCategory(id: number, formData: FormData) {
   try {
     const body = {
       name: formData.get("name"),
@@ -149,6 +155,7 @@ export async function editCategory(id: string, formData: FormData) {
         isActive: body.isActive === "1" ? true : false,
       },
     });
+    revalidatePath("/categories");
     return {
       success: true,
       data: updatedCategory,
@@ -164,13 +171,17 @@ export async function editCategory(id: string, formData: FormData) {
   }
 }
 //delete category
-export async function deleteCategory(id: string) {
+export async function deleteCategory(id: number) {
   try {
     await prisma.category.delete({
       where: {
         id: Number(id),
       },
     });
+    revalidatePath("/categories");
+    return {
+      success: true,
+    };
   } catch (err: any) {
     console.log(err);
     if (err instanceof ZodError) {
@@ -178,6 +189,137 @@ export async function deleteCategory(id: string) {
       //end of if
     } else {
       return { success: false, error: err?.message || "internal server eror" };
+    }
+  }
+}
+//delete product
+// export async function deleteProduct(id: number) {
+//   try {
+//     await prisma.product.delete({
+//       where: {
+//         id: Number(id),
+//       },
+//     });
+//     revalidatePath("/products");
+//     return {
+//       success: true,
+//     };
+//   } catch (err: any) {
+//     console.log(err);
+//   }
+// }
+
+//create product
+export async function createProduct(
+  formData: FormData,
+  colors: Color[],
+  images: string[],
+) {
+  try {
+    const body = {
+      name: formData.get("name"),
+      description: formData.get("description"),
+      categoryId: Number(formData.get("categoryId")),
+      price: Number(formData.get("price")),
+      company: formData.get("company"),
+      images,
+      colors,
+    };
+    console.log(body);
+    productSchema.parse(body);
+
+    const product = await prisma.product.create({
+      data: {
+        name: body.name as string,
+        description: body.description as string,
+        categoryId: Number(body.categoryId),
+        images: body.images,
+        price: Number(body.price),
+        company: body.company as string,
+      },
+    });
+
+    for (const color of colors) {
+      await prisma.color.create({
+        data: {
+          color: color.color,
+          quantity: color.quantity,
+          productId: product.id,
+        },
+      });
+    }
+
+    return {
+      success: true,
+      data: product,
+    };
+  } catch (err: any) {
+    console.log(err);
+    if (err instanceof ZodError) {
+      return { success: false, error: "Please insert a correct data" };
+    } else {
+      return { success: false, error: err?.message || "Internal server error" };
+    }
+  }
+}
+
+export async function updateProduct(
+  formData: FormData,
+  colors: {
+    color: string;
+    quantity: number;
+    id?: number;
+  }[],
+  images: string[],
+  id: number,
+) {
+  try {
+    const body = {
+      name: formData.get("name"),
+      description: formData.get("description"),
+      categoryId: Number(formData.get("categoryId")),
+      price: Number(formData.get("price")),
+      company: formData.get("company"),
+      images,
+      colors,
+    };
+    console.log(body);
+    productSchema.parse(body);
+
+    const product = await prisma.product.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        name: body.name as string,
+        description: body.description as string,
+        categoryId: Number(body.categoryId),
+        images: body.images,
+        price: Number(body.price),
+        company: body.company as string,
+      },
+    });
+
+    for (const color of colors) {
+      await prisma.color.create({
+        data: {
+          color: color.color,
+          quantity: color.quantity,
+          productId: product.id,
+        },
+      });
+    }
+
+    return {
+      success: true,
+      data: product,
+    };
+  } catch (err: any) {
+    console.log(err);
+    if (err instanceof ZodError) {
+      return { success: false, error: "Please insert a correct data" };
+    } else {
+      return { success: false, error: err?.message || "Internal server error" };
     }
   }
 }

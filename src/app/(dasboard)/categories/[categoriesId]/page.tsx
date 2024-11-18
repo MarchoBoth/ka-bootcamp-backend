@@ -1,7 +1,8 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { notFound } from "next/navigation";
-import FormEdit from "../_components/formEdit";
+
 import prisma from "@/lib/prisma";
+import Form from "../_components/form";
 
 type Props = {
   params: {
@@ -28,7 +29,7 @@ export default async function EditCategoryPage({ params }: Props) {
         <div>Status: {category.isActive ? "Active" : "Inactive"}</div>
         <div>Description: {category.description}</div>
       </div>
-      <FormEdit categoryId={params.categoriesId} />
+      <Form category={category} />
     </div>
   );
 }

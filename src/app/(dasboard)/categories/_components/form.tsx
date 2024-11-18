@@ -1,12 +1,20 @@
 "use client";
 import Swal from "sweetalert2";
-import { createCategory } from "@/actions";
+import { createCategory, editCategory } from "@/actions";
 import { useRouter } from "next/navigation";
-
-export default function Form() {
+import { Category } from "@prisma/client";
+import { useState } from "react";
+interface FormProps {
+  category?: Category;
+}
+export default function Form({ category }: FormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const handleSubmit = async (formData: FormData) => {
-    const result = await createCategory(formData);
+    setIsLoading(true);
+    const result = category
+      ? await editCategory(category.id, formData)
+      : await createCategory(formData);
 
     if (!result.success) {
       Swal.fire({
@@ -18,12 +26,15 @@ export default function Form() {
       await Swal.fire({
         icon: "success",
         title: "Success",
-        text: "Category created successfully",
+        text: category
+          ? "Category updated successfully"
+          : "Category created successfully",
       });
 
       router.push("/categories");
       router.refresh();
     }
+    setIsLoading(false);
   };
 
   return (
@@ -42,6 +53,7 @@ export default function Form() {
                   Name
                 </label>
                 <input
+                  defaultValue={category?.name}
                   type="text"
                   required
                   name="name"
@@ -60,6 +72,7 @@ export default function Form() {
                       className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white`}
                     >
                       <option
+                        defaultValue={category?.isActive ? "1" : "0"}
                         value={1}
                         className="text-body dark:text-bodydark "
                       >
@@ -67,6 +80,7 @@ export default function Form() {
                       </option>
 
                       <option
+                        defaultValue={category?.isActive ? "0" : "1"}
                         value={0}
                         className="text-body dark:text-bodydark"
                       >
@@ -100,6 +114,7 @@ export default function Form() {
                     Description
                   </label>
                   <textarea
+                    defaultValue={category?.description || ""}
                     rows={6}
                     name="description"
                     placeholder="Enter description"
@@ -110,9 +125,11 @@ export default function Form() {
 
               <button
                 type="submit"
-                className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
+                className={`flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 ${
+                  isLoading ? "bg-gray-400 cursor-not-allowed" : ""
+                }`}
               >
-                Submit
+                {isLoading ? "Loading..." : "Submit"}
               </button>
             </div>
           </form>

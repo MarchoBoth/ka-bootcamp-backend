@@ -2,9 +2,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import prisma from "@/lib/prisma";
 import dayjs from "dayjs";
 import Link from "next/link";
-import { deleteCategory } from "@/actions";
-import Swal from "sweetalert2";
-import FormDelete from "./_components/formDelet";
+import UpdateDeleteBtn from "@/app/_components/update-delete-btn";
 
 export default async function CategoriesPage() {
   //get categories
@@ -60,7 +58,11 @@ export default async function CategoriesPage() {
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <div className="flex items-center space-x-3.5">
                       {/* edit */}
-                      <FormDelete categoryId={category.id.toString()} />
+                      <UpdateDeleteBtn
+                        url={`categories/${category.id}`}
+                        type="category"
+                        id={category.id}
+                      />
                     </div>
                   </td>
                 </tr>
