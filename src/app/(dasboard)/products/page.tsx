@@ -67,8 +67,8 @@ export default async function ProductsPage() {
                 <div className="mb-2 mt-2 flex h-12.5 w-15 overflow-hidden rounded-md">
                   <Image
                     src={`${process.env.SUPABASE_PUBLIC_IMAGE}/${(product.images as string[])[0]}`}
-                    width={60}
-                    height={50}
+                    width={70}
+                    height={70}
                     alt="Product"
                   />
                 </div>

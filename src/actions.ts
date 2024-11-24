@@ -272,6 +272,7 @@ export async function updateProduct(
   }[],
   images: string[],
   id: number,
+  idsColor: number[],
 ) {
   try {
     const body = {
@@ -301,11 +302,31 @@ export async function updateProduct(
     });
 
     for (const color of colors) {
-      await prisma.color.create({
-        data: {
-          color: color.color,
-          quantity: color.quantity,
-          productId: product.id,
+      if (!color.id) {
+        await prisma.color.create({
+          data: {
+            color: color.color,
+            quantity: color.quantity,
+            productId: product.id,
+          },
+        });
+      } else {
+        await prisma.color.update({
+          where: {
+            id: color.id,
+          },
+          data: {
+            color: color.color,
+            quantity: color.quantity,
+          },
+        });
+      }
+    }
+
+    for (const id of idsColor) {
+      await prisma.color.delete({
+        where: {
+          id: id,
         },
       });
     }
@@ -321,5 +342,22 @@ export async function updateProduct(
     } else {
       return { success: false, error: err?.message || "Internal server error" };
     }
+  }
+}
+
+//delete product
+export async function deleteProduct(id: number) {
+  try {
+    await prisma.product.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    revalidatePath("/products");
+    return {
+      success: true,
+    };
+  } catch (err: any) {
+    console.log(err);
   }
 }

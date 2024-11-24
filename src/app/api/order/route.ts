@@ -11,6 +11,7 @@ type OrderPayload = {
   quantity: number;
 };
 
+//create order
 export async function POST(request: Request) {
   try {
     const user = await verifyUser(request);
@@ -105,5 +106,65 @@ export async function POST(request: Request) {
     } else {
       return new NextResponse("Internal server error", { status: 500 });
     }
+  }
+}
+//get all orders
+export async function GET(request: Request) {
+  try {
+    const user = await verifyUser(request);
+
+    if (!user) {
+      return NextResponse.json(
+        {
+          data: null,
+
+          message: "Unauthorized",
+        },
+
+        {
+          status: 401,
+        },
+      );
+    }
+
+    const orders = await prisma.order.findMany({
+      where: {
+        userId: user.id,
+      },
+
+      include: {
+        items: {
+          include: {
+            product: {
+              include: {
+                category: true,
+
+                colors: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return NextResponse.json({
+      data: orders,
+
+      message: "Orders fetched successfully",
+    });
+  } catch (err: any) {
+    console.log(err);
+
+    return NextResponse.json(
+      {
+        data: null,
+
+        message: err?.message || "Internal server error",
+      },
+
+      {
+        status: 500,
+      },
+    );
   }
 }

@@ -1,6 +1,6 @@
 "use client";
-import { deleteCategory } from "@/actions";
-import { deleteProduct } from "@/actions";
+import { deleteCategory, deleteProduct } from "@/actions";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
@@ -28,11 +28,11 @@ export default function UpdateDeleteBtn({
         type === "category"
           ? await deleteCategory(id)
           : await deleteProduct(id);
-      if (res.success) {
-        Swal.fire("Success", res.message, "success");
+      if (res?.success) {
+        Swal.fire("Success", "Successfully deleted", "success");
         router.refresh();
       } else {
-        Swal.fire("Error", res.message, "error");
+        Swal.fire("Error", "An unexpected error occurred", "error");
       }
     }
   };

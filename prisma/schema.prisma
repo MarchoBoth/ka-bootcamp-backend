@@ -76,11 +76,15 @@ model Color {
 }
 
 model Order {
-  id     Int          @id @default(autoincrement())
-  status OrderStatus  @default(PENDING)
+  id         Int          @id @default(autoincrement())
+  status     OrderStatus  @default(PENDING)
   // invoice Invoice?
-  items  OrderItems[]
-  userId Int
+  items      OrderItems[]
+  userId     Int
+  address    String?
+  postalCode String?
+  country    String?
+  city       String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

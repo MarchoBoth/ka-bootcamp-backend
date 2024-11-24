@@ -37,10 +37,10 @@ export default function FormProduct({ categories, product }: FormProductProps) {
           },
         ],
   );
-
+  const [deleteColors, setDeleteColors] = useState<number[]>([]);
   async function handleSubmit(formData: FormData) {
     const results = product
-      ? await updateProduct(formData, colors, images, product.id)
+      ? await updateProduct(formData, colors, images, product.id, deleteColors)
       : await createProduct(formData, colors, images);
 
     if (results.success) {
@@ -62,7 +62,10 @@ export default function FormProduct({ categories, product }: FormProductProps) {
     setColors([...colors, { color: "#000000", quantity: 0 }]);
   }
 
-  function handleDeleteColor(index: number) {
+  function handleDeleteColor(index: number, id?: number) {
+    if (id) {
+      setDeleteColors([...deleteColors, id]);
+    }
     setColors(colors.filter((_, i) => i !== index));
   }
 
