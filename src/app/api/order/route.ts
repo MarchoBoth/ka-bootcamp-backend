@@ -50,13 +50,18 @@ export async function POST(request: Request) {
         data: {
           status: "PENDING",
           userId: user.id,
-          //   items: {
-          //     create: (body.items as OrderPayload[]).map((item) => ({
-          //       colorId: item.colorId,
-          //       productId: item.productId,
-          //       quantity: item.quantity,
-          //     })),
-          //   },
+          address: body.address,
+          postalCode: body.postalCode,
+          country: body.country,
+          city: body.city,
+
+          items: {
+            create: (body.items as OrderPayload[]).map((item) => ({
+              colorId: item.colorId,
+              productId: item.productId,
+              quantity: item.quantity,
+            })),
+          },
         },
         include: {
           user: {

@@ -112,7 +112,7 @@ export async function GET(
       });
     }
 
-    const order = await prisma.order.findMany({
+    const order = await prisma.order.findFirst({
       where: {
         id: Number(params.orderId),
         userId: user.id,
