@@ -147,6 +147,7 @@ export async function GET(request: Request) {
                 colors: true,
               },
             },
+            color: true,
           },
         },
       },
