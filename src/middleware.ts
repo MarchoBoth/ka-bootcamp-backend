@@ -27,5 +27,11 @@ export async function middleware(request: NextRequest) {
   // }
 }
 export const config: MiddlewareConfig = {
-  matcher: ["/", "/product/:path*", "/categories/:path*"],
+  matcher: [
+    "/",
+    "/product/:path*",
+    "/categories/:path*",
+    "/order/:path*",
+    "/api/:path*",
+  ],
 };
