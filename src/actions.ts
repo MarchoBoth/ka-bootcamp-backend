@@ -9,6 +9,7 @@ import { cookies } from "next/headers";
 import { categorySchema } from "./schema/category";
 import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
 import { productSchema } from "./schema/product";
+
 interface Color {
   color: string;
   quantity: number;
@@ -286,7 +287,7 @@ export async function updateProduct(
     };
     console.log(body);
     productSchema.parse(body);
-
+    console.log("idsColor", idsColor);
     const product = await prisma.product.update({
       where: {
         id: Number(id),
