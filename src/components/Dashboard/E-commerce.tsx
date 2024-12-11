@@ -7,7 +7,7 @@ import ChatCard from "../Chat/ChatCard";
 import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
 import { Category, Color, OrderItems, Product, User } from "@prisma/client";
-
+import { Profit } from "@/types/profit";
 const MapOne = dynamic(() => import("@/components/Maps/MapOne"), {
   ssr: false,
 });
@@ -28,6 +28,7 @@ type ECommerceProps = {
     category: Category;
   })[];
   orders: number;
+  profit: Profit[];
 };
 
 const ECommerce = ({
@@ -35,6 +36,7 @@ const ECommerce = ({
   categories,
   products,
   orders,
+  profit,
 }: ECommerceProps) => {
   const topProducts = products
     .map((product) => {
@@ -164,7 +166,7 @@ const ECommerce = ({
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         {/* <ChartOne /> */}
-        <ChartTwo />
+        <ChartTwo profit={profit} />
         <ChartThree categories={categories} />
         {/* <MapOne /> */}
         <div className="col-span-12">

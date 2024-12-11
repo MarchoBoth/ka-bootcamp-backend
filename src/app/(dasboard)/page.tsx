@@ -1,5 +1,6 @@
 import ECommerce from "@/components/Dashboard/E-commerce";
 import prisma from "@/lib/prisma";
+import { getProfit } from "@/lib/profit";
 
 export default async function Home() {
   const categories = await prisma.category.findMany({
@@ -24,6 +25,9 @@ export default async function Home() {
       roles: "CUSTOMER",
     },
   });
+  const profit = await getProfit();
+
+  console.log("profit", profit);
   return (
     <div>
       <ECommerce
@@ -31,6 +35,7 @@ export default async function Home() {
         categories={categories}
         orders={orders}
         products={products}
+        profit={profit}
       />
     </div>
   );
