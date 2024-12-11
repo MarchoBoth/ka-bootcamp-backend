@@ -2,7 +2,11 @@ import ECommerce from "@/components/Dashboard/E-commerce";
 import prisma from "@/lib/prisma";
 
 export default async function Home() {
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany({
+    include: {
+      products: true,
+    },
+  });
   const products = await prisma.product.findMany({
     include: {
       items: {
