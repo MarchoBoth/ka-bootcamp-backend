@@ -1,12 +1,38 @@
-import { useState } from "react";
+"use client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/actions";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { headers } from "next/headers";
+import { User } from "@prisma/client";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const getCurrentUser = async () => {
+    const cookieStore = Cookies.get("token");
+    console.log(cookieStore);
+    try {
+      const { data } = await axios.get("/api/auth/current", {
+        headers: {
+          Authorization: `Bearer ${cookieStore}`,
+        },
+      });
+
+      setUser(data.data);
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
+
   //router
   const router = useRouter();
   //handle sign out
@@ -32,9 +58,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {user?.name}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">{user?.email}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
