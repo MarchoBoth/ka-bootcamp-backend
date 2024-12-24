@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { Profit } from "@/types/profit";
 
 type ChartTwoProps = {
-  profit: Profit[];
+  profits: Profit[];
 };
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
@@ -80,11 +80,49 @@ interface ChartTwoState {
   }[];
 }
 
-const ChartTwo = ({ profit }: ChartTwoProps) => {
-  const totalProfit = profit.map((profit) => {
+const ChartTwo = ({ profits }: ChartTwoProps) => {
+  
+  const newTotalProfits = [
+    {
+      day: "Monday",
+      orders: profits.find((profit) => profit.day === "Monday")?.orders,
+    },
+    {
+      day: "Tuesday",
+      orders: profits.find((profit) => profit.day === "Tuesday")?.orders,
+    },
+    {
+      day: "Wednesday",
+      orders: profits.find((profit) => profit.day === "Wednesday")?.orders,
+    },
+    {
+      day: "Thursday",
+      orders: profits.find((profit) => profit.day === "Thursday")?.orders,
+    },
+    {
+      day: "Friday",
+      orders: profits.find((profit) => profit.day === "Friday")?.orders,
+    },
+    {
+      day: "Saturday",
+      orders: profits.find((profit) => profit.day === "Saturday")?.orders,
+    },
+    {
+      day: "Sunday",
+      orders: profits.find((profit) => profit.day === "Wednesday")?.orders,
+    },
+  ];
+
+  const totalProfits = newTotalProfits.map((profit) => {
     const { orders } = profit;
     let total = 0;
-    orders.forEach((order) => {
+
+    if (orders?.length === 0) {
+      return 0;
+    }
+
+    // Menghitung total profit dari setiap order
+    orders?.forEach((order) => {
       order.items.forEach((item) => {
         total += item.product.price * item.quantity;
       });
@@ -92,22 +130,14 @@ const ChartTwo = ({ profit }: ChartTwoProps) => {
 
     return total;
   });
+
   const series = [
     {
       name: "Profit",
-      data: totalProfit,
+      data: totalProfits,
     },
   ];
-  // const series = [
-  //   {
-  //     name: "Sales",
-  //     data: [44, 55, 41, 67, 22, 43, 65],
-  //   },
-  //   {
-  //     name: "Revenue",
-  //     data: [13, 23, 20, 8, 13, 27, 15],
-  //   },
-  // ];
+
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-6">
