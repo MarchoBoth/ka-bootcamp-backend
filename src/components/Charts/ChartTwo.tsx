@@ -85,31 +85,31 @@ const ChartTwo = ({ profit }: ChartTwoProps) => {
   const newTotalProfits = [
     {
       day: "Monday",
-      orders: profit.find((profit) => profit.day === "Monday")?.orders,
+      orders: profit.find((p) => p.day === "Monday")?.orders,
     },
     {
       day: "Tuesday",
-      orders: profit.find((profit) => profit.day === "Tuesday")?.orders,
+      orders: profit.find((p) => p.day === "Tuesday")?.orders,
     },
     {
       day: "Wednesday",
-      orders: profit.find((profit) => profit.day === "Wednesday")?.orders,
+      orders: profit.find((p) => p.day === "Wednesday")?.orders,
     },
     {
       day: "Thursday",
-      orders: profit.find((profit) => profit.day === "Thursday")?.orders,
+      orders: profit.find((p) => p.day === "Thursday")?.orders,
     },
     {
       day: "Friday",
-      orders: profit.find((profit) => profit.day === "Friday")?.orders,
+      orders: profit.find((p) => p.day === "Friday")?.orders,
     },
     {
       day: "Saturday",
-      orders: profit.find((profit) => profit.day === "Saturday")?.orders,
+      orders: profit.find((p) => p.day === "Saturday")?.orders,
     },
     {
       day: "Sunday",
-      orders: profit.find((profit) => profit.day === "Sunday")?.orders,
+      orders: profit.find((p) => p.day === "Sunday")?.orders,
     },
   ];
 
