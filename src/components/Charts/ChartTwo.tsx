@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { Profit } from "@/types/profit";
 
 type ChartTwoProps = {
-  profits: Profit[];
+  profits : Profit[];
 };
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
@@ -55,7 +55,7 @@ const options: ApexOptions = {
   },
 
   xaxis: {
-    categories: ["M", "T", "W", "T", "F", "S", "S"],
+    categories: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
   },
   legend: {
     position: "top",
@@ -64,9 +64,9 @@ const options: ApexOptions = {
     fontWeight: 500,
     fontSize: "14px",
 
-    markers: {
-      // radius: 99,
-    },
+    // markers: {
+    //   // radius: 99,
+    // },
   },
   fill: {
     opacity: 1,
