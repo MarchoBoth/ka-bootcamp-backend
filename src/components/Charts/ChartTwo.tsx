@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { Profit } from "@/types/profit";
 
 type ChartTwoProps = {
-  profits : Profit[];
+  profit : Profit[];
 };
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
@@ -80,36 +80,36 @@ interface ChartTwoState {
   }[];
 }
 
-const ChartTwo = ({ profits }: ChartTwoProps) => {
+const ChartTwo = ({ profit }: ChartTwoProps) => {
   
   const newTotalProfits = [
     {
       day: "Monday",
-      orders: profits.find((profit) => profit.day === "Monday")?.orders,
+      orders: profit.find((profit) => profit.day === "Monday")?.orders,
     },
     {
       day: "Tuesday",
-      orders: profits.find((profit) => profit.day === "Tuesday")?.orders,
+      orders: profit.find((profit) => profit.day === "Tuesday")?.orders,
     },
     {
       day: "Wednesday",
-      orders: profits.find((profit) => profit.day === "Wednesday")?.orders,
+      orders: profit.find((profit) => profit.day === "Wednesday")?.orders,
     },
     {
       day: "Thursday",
-      orders: profits.find((profit) => profit.day === "Thursday")?.orders,
+      orders: profit.find((profit) => profit.day === "Thursday")?.orders,
     },
     {
       day: "Friday",
-      orders: profits.find((profit) => profit.day === "Friday")?.orders,
+      orders: profit.find((profit) => profit.day === "Friday")?.orders,
     },
     {
       day: "Saturday",
-      orders: profits.find((profit) => profit.day === "Saturday")?.orders,
+      orders: profit.find((profit) => profit.day === "Saturday")?.orders,
     },
     {
       day: "Sunday",
-      orders: profits.find((profit) => profit.day === "Wednesday")?.orders,
+      orders: profit.find((profit) => profit.day === "Sunday")?.orders,
     },
   ];
 
