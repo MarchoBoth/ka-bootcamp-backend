@@ -36,7 +36,7 @@ const ECommerce = ({
   categories,
   products,
   orders,
-  profit,
+  // profit,
 }: ECommerceProps) => {
   const topProducts = products
     .map((product) => {
