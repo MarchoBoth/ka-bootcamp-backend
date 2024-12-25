@@ -20,7 +20,8 @@ const nextConfig = {
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: process.env.DOMAIN_NAME || "*",
+            value: "*",
+            // value: process.env.DOMAIN_NAME || "*",
           },
           {
             key: "Access-Control-Allow-Methods",
