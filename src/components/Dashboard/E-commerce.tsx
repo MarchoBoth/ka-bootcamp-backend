@@ -8,13 +8,13 @@ import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
 import { Category, Color, OrderItems, Product, User } from "@prisma/client";
 import { Profit } from "@/types/profit";
-const MapOne = dynamic(() => import("@/components/Maps/MapOne"), {
-  ssr: false,
-});
+// const MapOne = dynamic(() => import("@/components/Maps/MapOne"), {
+//   ssr: false,
+// });
 
-const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
-  ssr: false,
-});
+// const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
+//   ssr: false,
+// });
 type ECommerceProps = {
   customers: number;
   categories: (Category & {
