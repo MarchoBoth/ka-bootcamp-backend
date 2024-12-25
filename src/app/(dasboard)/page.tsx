@@ -35,7 +35,7 @@ export default async function Home() {
         categories={categories}
         orders={orders}
         products={products}
-        profit={profit}
+        profits={profit}
       />
     </div>
   );
