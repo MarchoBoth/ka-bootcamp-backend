@@ -1,10 +1,11 @@
 import { MiddlewareConfig, NextRequest, NextResponse } from "next/server";
 import React from "react";
 
+
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname === "/api/") {
     const response = NextResponse.next();
-    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set("Access-Control-Allow-Origin", process.env.DOMAIN_NAME || "*");
     response.headers.set(
       "Access-Control-Allow-Methods",
       "GET, POST, PUT, DELETE, OPTIONS",
