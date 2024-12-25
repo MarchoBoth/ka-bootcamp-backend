@@ -38,23 +38,23 @@ const ECommerce = ({
   orders,
   // profit,
 }: ECommerceProps) => {
-  const topProducts = products
-    .map((product) => {
-      const { items } = product;
+  // const topProducts = products
+  //   .map((product) => {
+  //     const { items } = product;
 
-      let quantity = 0;
-      items.forEach((item) => {
-        quantity += item.quantity;
-      });
+  //     let quantity = 0;
+  //     items.forEach((item) => {
+  //       quantity += item.quantity;
+  //     });
 
-      //const quantity =items.reduce((total,item)=> total + item.quantity,0)
-      return {
-        ...product,
-        quantity,
-      };
-    })
-    .sort((a, b) => b.quantity - a.quantity)
-    .filter((product) => product.quantity > 0);
+  //     //const quantity =items.reduce((total,item)=> total + item.quantity,0)
+  //     return {
+  //       ...product,
+  //       quantity,
+  //     };
+  //   })
+  //   .sort((a, b) => b.quantity - a.quantity)
+  //   .filter((product) => product.quantity > 0);
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
