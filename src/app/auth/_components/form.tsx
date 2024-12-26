@@ -42,13 +42,12 @@ export default function Form() {
         text: result?.error || "internal server eror",
       });
     } else {
-      Swal.fire({
+     await Swal.fire({
         icon: "success",
         title: "Yes..",
         text: result?.error || "Sign in success",
-      }).then(() => {
-        router.push("/");
-      });
+      })
+      router.push("/");
     }
     console.log(result);
   };
