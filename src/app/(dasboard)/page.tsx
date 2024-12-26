@@ -30,13 +30,13 @@ export default async function Home() {
   console.log("profit", profit);
   return (
     <div>
-      <ECommerce
+      {/* <ECommerce
         customers={customers}
         categories={categories}
         orders={orders}
         products={products}
         profits={profit}
-      />
+      /> */}
     </div>
   );
 }
